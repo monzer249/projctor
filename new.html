@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 HOUSE NOT FOUND - نظام إدارة السكن</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        html {
+            overflow-x: hidden;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #ff6b6b;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --light-gray: #f0f2f5;
+            --text: #333;
+            --text-light: #666;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --nav-height: 80px;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-top: var(--nav-height);
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* شريط التنقل العلوي */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            height: var(--nav-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+        
+        .logo span {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(45deg, #ff6b6b, #4361ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: 10px;
+        }
+        
+        .logo i {
+            margin-left: 10px;
+            color: #ff6b6b;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin: 0 10px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 10px 18px;
+            border-radius: 30px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+        }
+        
+        .nav-links a:hover::before, .nav-links a.active::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .nav-links a i {
+            margin-left: 8px;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover i {
+            transform: rotate(360deg);
+        }
+        
+        /* الصفحات */
+        .page {
+            display: none;
+            animation: fadeIn 0.8s ease;
+            padding: 40px 5%;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page-title {
+            text-align: center;
+            font-size: 2.8rem;
+            color: white;
+            margin: 20px 0 30px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .page-subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            font-size: 1.3rem;
+            line-height: 1.8;
+        }
+        
+        /* صفحة المنزل الرئيسية */
+        .house-gallery {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            height: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gallery-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .gallery-slide.active {
+            opacity: 1;
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 30px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+        }
+        
+        .gallery-title {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .gallery-desc {
+            font-size: 1rem;
+            max-width: 600px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .gallery-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.3rem;
+            color: var(--dark);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .gallery-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .indicator.active {
+            background: var(--accent);
+            transform: scale(1.3);
+        }
+        
+        .explore-btn {
+            display: block;
+            width: 220px;
+            margin: 40px auto 0;
+            padding: 14px 28px;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+            border: 2px solid white;
+        }
+        
+        .explore-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.4);
+        }
+        
+        .explore-btn i {
+            margin-right: 10px;
+            transition: transform 0.5s ease;
+        }
+        
+        .explore-btn:hover i {
+            transform: rotate(90deg);
+        }
+        
+        /* صفحة الأعضاء - التصميم الجديد */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1300px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+        
+        .member-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            text-align: center;
+            height: auto;
+            overflow: visible;
+        }
+        
+        .member-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+        
+        .member-img-container {
+            width: 220px; /* زيادة حجم الصورة الدائرية */
+            height: 220px; /* زيادة حجم الصورة الدائرية */
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            margin-top: -90px;
+            margin-bottom: 25px;
+            border: 5px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: floating 4s ease-in-out infinite;
+        }
+        
+        .member-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            transition: var(--transition);
+        }
+        
+        .member-card:hover .member-img {
+            transform: scale(1.1);
+        }
+        
+        .member-info {
+            padding: 0 10px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: transparent;
+            width: 100%;
+        }
+        
+        .member-card h3 {
+            font-size: 2rem; /* زيادة حجم الاسم */
+            margin-bottom: 15px;
+            color: var(--dark);
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .member-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px; /* زيادة عرض الخط */
+            height: 4px; /* زيادة سمك الخط */
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .member-card p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .member-role {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 0 auto;
+            width: auto;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* زر العودة */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin: 20px auto 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            border: 2px solid white;
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+            max-width: 220px;
+            justify-content: center;
+        }
+        
+        .back-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(67, 97, 238, 0.4);
+        }
+        
+        .back-button i {
+            margin-right: 10px;
+            transition: transform 0.5s ease;
+        }
+        
+        .back-button:hover i {
+            transform: rotate(-90deg);
+        }
+        
+        /* الصفحات الفرعية */
+        .section-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            max-width: 1000px;
+            margin: 0 auto 40px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .list-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .list-item {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .list-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .list-item.room {
+            background: linear-gradient(135deg, #4361ee, #3f37c9);
+            color: white;
+        }
+        
+        .list-item.dinner-pair {
+            background: linear-gradient(135deg, #7209b7, #560bad);
+            color: white;
+        }
+        
+        .list-item.water-person {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+        }
+        
+        .list-item span {
+            display: block;
+            font-weight: normal;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            margin-top: 60px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            max-width: 1200px;
+            margin: 60px auto 0;
+        }
+        
+        footer p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        
+        .social-icons a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        /* تحسينات للهاتف */
+        @media (max-width: 992px) {
+            .members-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 70px;
+            }
+            
+            .member-img-container {
+                width: 200px;
+                height: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+                height: 70px;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            .nav-links li {
+                margin: 0 5px;
+            }
+            
+            .nav-links a {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .page {
+                padding: 30px 15px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .page-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .members-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 60px;
+            }
+            
+            .member-img-container {
+                width: 180px;
+                height: 180px;
+                margin-top: -80px;
+            }
+            
+            .member-card h3 {
+                font-size: 1.7rem;
+            }
+            
+            .member-card p {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px;
+            }
+            
+            .logo {
+                margin-bottom: 10px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 5px;
+            }
+            
+            .page-title {
+                font-size: 1.7rem;
+            }
+            
+            .members-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                gap: 80px;
+            }
+            
+            .member-img-container {
+                width: 190px;
+                height: 190px;
+                margin-top: -85px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-home"></i>
+            <span>404 HOUSE NOT FOUND</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active" data-page="home-page"><i class="fas fa-home"></i> الرئيسية</a></li>
+            <li><a href="#" data-page="members-page"><i class="fas fa-users"></i> الأعضاء</a></li>
+            <li><a href="#" data-page="rooms-page"><i class="fas fa-bed"></i> الغرف</a></li>
+            <li><a href="#" data-page="dinner-page"><i class="fas fa-utensils"></i> العشا</a></li>
+            <li><a href="#" data-page="water-page"><i class="fas fa-tint"></i> المويه</a></li>
+        </ul>
+    </nav>
+    
+    <!-- صفحة المنزل الرئيسية -->
+    <div class="page active" id="home-page">
+        <h1 class="page-title">مرحبًا بكم في سكن 404</h1>
+        <p class="page-subtitle">منزلنا المتواضع الذي يجمعنا معًا، حيث نشارك الذكريات واللحظات الجميلة. تصفح معرض الصور لترى لمحة عن حياتنا اليومية.</p>
+        
+        <div class="house-gallery">
+            <div class="gallery-slide active" style="background-image: url('images/home1.jpg')">
+                <div class="gallery-overlay">
+                    <h2 class="gallery-title">المنزل</h2>
+                    <p class="gallery-desc">المنزل ليس جدرانًا وسقفًا فقط، بل هو حضن دافئ، وذكريات لا تُنسى، وأشخاص يجعلون من كل زاوية فيه حياة.</p>
+                </div>
+            </div>
+            <div class="gallery-slide" style="background-image: url('images/together.jpg')">
+                <div class="gallery-overlay">
+                    <h2 class="gallery-title">العائلة</h2>
+                    <p class="gallery-desc"> العائلة ليست فقط من يربطنا بهم الدم، بل من يمنحوننا الأمان، والصدق، والدعم دون شرط. بعض الأصدقاء يصبحون عائلة باختيارنا، لأنهم كانوا معنا في كل لحظة ضعف وقوة، لأنهم فهمونا من نظرة، ووقفوا بجانبنا كما يفعل الأخ والصديق الحقيقي.</p>
+                </div>
+            </div>
+            <div class="gallery-slide" style="background-image: url('images/lastversion2.jpg')">
+                <div class="gallery-overlay">
+                    <h2 class="gallery-title">النزهة</h2>
+                    <p class="gallery-desc">النزهة ليست فقط مكان نذهب إليه، بل لحظات نعيشها مع من نحب، نضحك فيها من القلب، وننسى فيها هموم الحياة.</p>
+                </div>
+            </div>
+            <div class="gallery-slide" style="background-image: url('images/togther2.jpg')">
+                <div class="gallery-overlay">
+                    <h2 class="gallery-title">الملاعب</h2>
+                    <p class="gallery-desc">الملاعب تُعلّمنا أن الحياة لعبة تحتاج إلى تخطيط، وصبر، وروح جماعية، وأن الهزيمة ليست نهاية، بل بداية جديدة.</p>
+                </div>
+            </div>
+            
+            <div class="gallery-nav">
+                <div class="gallery-btn prev-btn"><i class="fas fa-chevron-right"></i></div>
+                <div class="gallery-btn next-btn"><i class="fas fa-chevron-left"></i></div>
+            </div>
+            
+            <div class="gallery-indicators">
+                <div class="indicator active"></div>
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+                <div class="indicator"></div>
+            </div>
+        </div>
+        
+        <a href="#" class="explore-btn" data-page="members-page">
+            <i class="fas fa-arrow-left"></i> استكشاف الأعضاء
+        </a>
+    </div>
+    
+    <!-- صفحة الأعضاء - التصميم الجديد -->
+    <div class="page" id="members-page">
+        <h1 class="page-title">أعضاء سكن 404</h1>
+        <p class="page-subtitle">تعرف على أفراد عائلتنا المميزين، كل منهم له دور فريد في جعل حياتنا معًا أكثر تميزًا</p>
+        
+        <div class="members-grid">
+            <!-- العضو 1: منذر -->
+            <div class="member-card">
+                <div class="member-img-container">
+                    <img src="images/monzernn.jpg" alt="منذر" class="member-img">
+                </div>
+                <div class="member-info">
+                    <h3>منذر</h3>
+                    <p>قائد المجموعة والمسؤول عن التخطيط العام</p>
+                    <span class="member-role">المسؤول العام</span>
+                </div>
+            </div>
+            
+            <!-- العضو 2: بله -->
+            <div class="member-card">
+                <div class="member-img-container">
+                    <img src="images/monzer.jpg" alt="بله" class="member-img">
+                </div>
+                <div class="member-info">
+                    <h3>بله</h3>
+                    <p>يدير المصاريف والأموال المشتركة </p>
+                    <span class="member-role">مسؤول التموين</span>
+                </div>
+            </div>
+            
+            <!-- العضو 3: الجعلي -->
+            <div class="member-card">
+                <div class="member-img-container">
+                    <img src="images/aljale.jpg" alt="الجعلي" class="member-img">
+                </div>
+                <div class="member-info">
+                    <h3>الجعلي</h3>
+                    <p>يحافظ على سلامة المنزل وتجهيزاته</p>
+                    <span class="member-role">مسؤول الصيانة</span>
+                </div>
+            </div>
+            
+            <!-- العضو 4: ابلف -->
+            <div class="member-card">
+                <div class="member-img-container">
+                    <img src="images/mohmed.jpg" alt="ود الرشيد" class="member-img">
+                </div>
+                <div class="mmber-info">
+                    <h3>ابلف</h3>
+                    <p>ينظم الفعاليات والأنشطة الاجتماعيه</p>
+                    <span class="member-role">مسؤول الفعاليات</span>
+                </div>
+            </div>
+            
+            <!-- العضو 5: ضرار -->
+            <div class="member-card">
+                <div class="member-img-container">
+                    <img src="images/drer.jpg" alt="ضرار" class="member-img">
+                </div>
+                <div class="member-info">
+                    <h3>ضرار</h3>
+                    <p>ينظم الأنشطة الترفيهية والفعاليات الممتعة</p>
+                    <span class="member-role">مسؤول الانشطه</span>
+                </div>
+            </div>
+            
+            <!-- العضو 6: جلال -->
+            <div class="member-card">
+                <div class="member-img-container">
+                    <img src="images/jlal.jpg" alt="جلال" class="member-img">
+                </div>
+                <div class="member-info">
+                    <h3>جلال</h3>
+                    <p>ينظم التخطيط الامن للمنزل</p>
+                    <span class="member-role">مسؤول التخطيط</span>
+                </div>
+            </div>
+            
+            <!-- العضو 7: مونتي -->
+            <div class="member-card">
+                <div class="member-img-container">
+                    <img src="images/montesrt2.jpg" alt="مونتي" class="member-img">
+                </div>
+                <div class="member-info">
+                    <h3>مونتي</h3>
+                    <p>ينظم مواعيد المهام والأنشطة المشتركة</p>
+                    <span class="member-role">مسؤول المهام</span>
+                </div>
+            </div>
+            
+            <!-- العضو 8: الريح -->
+            <div class="member-card">
+                <div class="member-img-container">
+                    <img src="images/alryh.jpg" alt="الريح" class="member-img">
+                </div>
+                <div class="member-info">
+                    <h3>الريح</h3>
+                    <p>يتأكد من نظافة المنزل وترتيبه الدائم</p>
+                    <span class="member-role">مسؤول النظافة</span>
+                </div>
+            </div>
+        </div>
+        
+        <a href="#" class="back-button" data-page="home-page">
+            <i class="fas fa-home"></i> العودة للصفحة الرئيسية
+        </a>
+    </div>
+    
+    <!-- صفحة الغرف -->
+    <div class="page" id="rooms-page">
+        <h1 class="page-title">توزيع الغرف</h1>
+        <p class="page-subtitle">تفاصيل توزيع الغرف وأسماء المقيمين في كل غرفة بمنزلنا الجميل</p>
+        
+        <div class="section-content">
+            <h2 class="section-title">توزيع الغرف</h2>
+            <div class="list-grid">
+                <div class="list-item room">
+                    الغرفة 1
+                    <span>الريح / منتصر</span>
+                </div>
+                <div class="list-item room">
+                    الغرفة 2
+                    <span>جلال</span>
+                </div>
+                <div class="list-item room">
+                    الغرفة 3
+                    <span>ابلف / ضرار</span>
+                </div>
+                <div class="list-item room">
+                    الغرفة 4
+                    <span>بله / الجعلي</span>
+                </div>
+                <div class="list-item room">
+                    الغرفة 5
+                    <span>منذر</span>
+                </div>
+            </div>
+        </div>
+        
+        <a href="#" class="back-button" data-page="members-page">
+            <i class="fas fa-arrow-left"></i> العودة للأعضاء
+        </a>
+    </div>
+    
+    <!-- صفحة العشاء -->
+    <div class="page" id="dinner-page">
+        <h1 class="page-title">توزيع العشاء</h1>
+        <p class="page-subtitle">تفاصيل توزيع أزواج العشاء ومسؤوليات إعداد الوجبات اليومية</p>
+        
+        <div class="section-content">
+            <h2 class="section-title">أزواج العشاء</h2>
+            <div class="list-grid">
+                <div class="list-item dinner-pair">
+                    منذر / ضرار
+                </div>
+                <div class="list-item dinner-pair">
+                    الريح / منتصر
+                </div>
+                <div class="list-item dinner-pair">
+                    بله / الجعلي
+                </div>
+                <div class="list-item dinner-pair">
+                    جلال / ود الرشيد
+                </div>
+            </div>
+        </div>
+        
+        <a href="#" class="back-button" data-page="members-page">
+            <i class="fas fa-arrow-left"></i> العودة للأعضاء
+        </a>
+    </div>
+    
+    <!-- صفحة الموية -->
+    <div class="page" id="water-page">
+        <h1 class="page-title">توزيع الموية</h1>
+        <p class="page-subtitle">قائمة المسؤولين عن الموية وتنظيم توزيع المياه في المنزل</p>
+        
+        <div class="section-content">
+            <h2 class="section-title">المسؤولون عن الموية</h2>
+            <div class="list-grid">
+                <div class="list-item water-person">منذر</div>
+                <div class="list-item water-person">جلال</div>
+                <div class="list-item water-person">الريح</div>
+                <div class="list-item water-person">منتصر</div>
+                <div class="list-item water-person">ضرار</div>
+                <div class="list-item water-person">الجعلي</div>
+                <div class="list-item water-person">بله</div>
+                <div class="list-item water-person">ود الرشيد</div>
+            </div>
+        </div>
+        
+        <a href="#" class="back-button" data-page="members-page">
+            <i class="fas fa-arrow-left"></i> العودة للأعضاء
+        </a>
+    </div>
+    
+    <footer>
+        <p>404 HOUSE NOT FOUND | © 2025 نظام إدارة السكن</p>
+        <p>جميع الحقوق محفوظة | تم التطوير بحب لسكن 404</p>
+        
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        // دالة للانتقال إلى صفحة محددة
+        function goToPage(pageId) {
+            // إخفاء جميع الصفحات
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // إظهار الصفحة المطلوبة
+            document.getElementById(pageId).classList.add('active');
+            
+            // تحديث حالة التنشيط في شريط التنقل
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // التمرير لأعلى الصفحة
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // إعادة تشغيل معرض الصور إذا كانت الصفحة الرئيسية
+            if (pageId === 'home-page') {
+                initGallery();
+            }
+        }
+        
+        // معرض صور المنزل
+        let slideInterval;
+        function initGallery() {
+            const slides = document.querySelectorAll('.gallery-slide');
+            const indicators = document.querySelectorAll('.indicator');
+            let currentSlide = 0;
+            
+            // إظهار الشريحة الحالية
+            function showSlide(index) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                indicators.forEach(indicator => indicator.classList.remove('active'));
+                
+                slides[index].classList.add('active');
+                indicators[index].classList.add('active');
+                currentSlide = index;
+            }
+            
+            // التالي
+            document.querySelector('.next-btn').addEventListener('click', () => {
+                let nextSlide = (currentSlide + 1) % slides.length;
+                showSlide(nextSlide);
+                resetInterval();
+            });
+            
+            // السابق
+            document.querySelector('.prev-btn').addEventListener('click', () => {
+                let prevSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(prevSlide);
+                resetInterval();
+            });
+            
+            // النقاط المؤشرة
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    showSlide(index);
+                    resetInterval();
+                });
+            });
+            
+            // إعادة تعيين الفاصل الزمني
+            function resetInterval() {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(() => {
+                    let nextSlide = (currentSlide + 1) % slides.length;
+                    showSlide(nextSlide);
+                }, 5000);
+            }
+            
+            // التبديل التلقائي
+            resetInterval();
+            
+            // إيقاف التبديل التلقائي عند التمرير فوق المعرض
+            const gallery = document.querySelector('.house-gallery');
+            gallery.addEventListener('mouseenter', () => {
+                clearInterval(slideInterval);
+            });
+            
+            gallery.addEventListener('mouseleave', resetInterval);
+        }
+        
+        // تهيئة الصفحة عند التحميل
+        window.addEventListener('load', function() {
+            // تهيئة معرض الصور
+            initGallery();
+            
+            // إضافة مستمعي الأحداث لروابط التنقل
+            document.querySelectorAll('.nav-links a, .explore-btn, .back-button').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    goToPage(pageId);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
